@@ -17,9 +17,6 @@ services:
     image: 'web_back'
     container_name: 'web_back'
     build: ./appraisal-web-back
-    environment: 
-      - MONGODB_URI=mongodb://mongodb:27017/appraisalDB
-      - redirectUrl=http://localhost/api/auth/openid/return
     ports:
       - 3001:3001
 
