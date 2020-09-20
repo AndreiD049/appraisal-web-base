@@ -1,0 +1,44 @@
+version: "3.8"
+services: 
+  mongodb:
+    image: 'mongo'
+    container_name: "mongodb"
+    volumes: 
+      - mongodata:/data/db
+    ports: 
+      - 27017:27017
+  web_front:
+    image: 'web_front:dev'
+    container_name: 'web_front'
+    environment: 
+      - CI=true
+      - HOST=web_front
+    build:
+      context: ./appraisal-web-front
+      dockerfile: Dockerfile.dev
+    ports: 
+      - 3000:3000
+    volumes: 
+      - ./appraisal-web-front:/app
+  web_back:
+    image: 'web_back:dev'
+    container_name: 'web_back'
+    build:
+      context: ./appraisal-web-back
+      dockerfile: Dockerfile.dev
+    volumes: 
+      - ./appraisal-web-back:/urs/src/appraisal-back
+    ports:
+      - 3001:3001
+  nginx_dev:
+    image: 'nignx_dev'
+    container_name: 'nginx_dev'
+    build: 
+      context: ./appraisal-web-front
+      dockerfile: Dockerfile-nginx.dev
+    ports:
+    - 3002:3002
+
+volumes: 
+  mongodata:
+  
