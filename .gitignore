@@ -1,5 +1,6 @@
 appraisal-web-back
 appraisal-web-front
+dhparam/*.pem
 # Logs
 logs
 *.log
