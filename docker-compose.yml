@@ -11,15 +11,40 @@ services:
     image: 'web_front'
     container_name: 'web_front'
     build: ./appraisal-web-front
+    volumes: 
+      - webroot:/usr/share/nginx/html
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
     ports: 
       - 80:80
+      - 443:443
   web_back:
     image: 'web_back'
     container_name: 'web_back'
     build: ./appraisal-web-back
     ports:
       - 3001:3001
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - webroot:/var/www/html
+    depends_on: 
+      - web_front
+    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email --force-renewal -d admin-tc.xyz -d www.admin-tc.xyz 
 
 volumes: 
   mongodata:
+  certbot-etc:
+  certbot-var:
+  webroot:
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /appraisal-web-base/dhparam/
+      o: bind
   
