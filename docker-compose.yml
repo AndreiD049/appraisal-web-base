@@ -3,6 +3,7 @@ services:
   mongodb:
     image: 'mongo'
     container_name: "mongodb"
+    command: [--auth]
     volumes: 
       - mongodata:/data/db
     ports: 
