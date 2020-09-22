@@ -35,7 +35,7 @@ services:
       - webroot:/var/www/html
     depends_on: 
       - web_front
-    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email --force-renewal -d admin-tc.xyz -d www.admin-tc.xyz 
+    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email --force-renewal -d admin-tc.xyz -d www.admin-tc.xyz -d admintools.online -d www.admintools.online
 
 volumes: 
   mongodata:
