@@ -13,7 +13,7 @@ services:
     container_name: 'web_front'
     build: ./appraisal-web-front
     volumes: 
-      - webroot:/usr/share/nginx/html
+      - webroot:/var/www/html
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - dhparam:/etc/ssl/certs
@@ -35,13 +35,18 @@ services:
       - webroot:/var/www/html
     depends_on: 
       - web_front
-    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email --force-renewal -d admin-tc.xyz -d www.admin-tc.xyz -d admintools.online -d www.admintools.online
+    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d admintools.online -d www.admintools.online
 
 volumes: 
   mongodata:
   certbot-etc:
   certbot-var:
   webroot:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/data/views
+      o: bind
   dhparam:
     driver: local
     driver_opts:
