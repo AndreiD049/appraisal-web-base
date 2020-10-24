@@ -1,68 +1,42 @@
 version: "3.8"
 services: 
-  # mongodb:
-  #   image: 'mongo'
-  #   container_name: "mongodb"
-  #   command: [--auth]
-  #   volumes: 
-  #     - mongodata:/data/db
-  #   ports: 
-  #     - 27017:27017
-  mongodb1:
+  mongodb:
     image: 'mongo'
-    hostname: "mongodb1"
-    container_name: "mongodb1"
+    hostname: "admintools.online"
+    container_name: "mongodb"
     volumes: 
       - mongodata:/data/db
     ports: 
       - 27017:27017
     entrypoint: ["mongod", "--bind_ip_all", "--auth", "--replSet", "rs0"]
-  mongodb2:
-    image: 'mongo'
-    hostname: "mongodb2"
-    container_name: "mongodb2"
+  web_front:
+    image: 'web_front'
+    container_name: 'web_front'
+    build: ./appraisal-web-front
     volumes: 
-      - mongodata:/data/db2
+      - webroot:/var/www/html
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
     ports: 
-      - 27016:27017
-    entrypoint: ["mongod", "--bind_ip_all", "--auth", "--replSet", "rs0"]
-  mongodb3:
-    image: 'mongo'
-    hostname: "mongodb3"
-    container_name: "mongodb3"
-    volumes: 
-      - mongodata:/data/db3
-    ports: 
-      - 27015:27017
-    entrypoint: ["mongod", "--bind_ip_all", "--auth", "--replSet", "rs0"]
-  # web_front:
-  #   image: 'web_front'
-  #   container_name: 'web_front'
-  #   build: ./appraisal-web-front
-  #   volumes: 
-  #     - webroot:/var/www/html
-  #     - certbot-etc:/etc/letsencrypt
-  #     - certbot-var:/var/lib/letsencrypt
-  #     - dhparam:/etc/ssl/certs
-  #   ports: 
-  #     - 80:80
-  #     - 443:443
-  # web_back:
-  #   image: 'web_back'
-  #   container_name: 'web_back'
-  #   build: ./appraisal-web-back
-  #   ports:
-  #     - 3001:3001
-  # certbot:
-  #   image: certbot/certbot
-  #   container_name: certbot
-  #   volumes:
-  #     - certbot-etc:/etc/letsencrypt
-  #     - certbot-var:/var/lib/letsencrypt
-  #     - webroot:/var/www/html
-  #   depends_on: 
-  #     - web_front
-  #   command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d admintools.online -d www.admintools.online
+      - 80:80
+      - 443:443
+  web_back:
+    image: 'web_back'
+    container_name: 'web_back'
+    build: ./appraisal-web-back
+    ports:
+      - 3001:3001
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - webroot:/var/www/html
+    depends_on: 
+      - web_front
+    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d admintools.online -d www.admintools.online
 
 volumes: 
   mongodata:
