@@ -1,43 +1,64 @@
 version: "3.8"
 services: 
-  mongodb:
+  # Mongo 3 node-replica set
+  mongodb1:
     image: 'mongo'
-    container_name: "mongodb"
+    hostname: "mongodb1"
+    container_name: "mongodb1"
     volumes: 
       - mongodata:/data/db
     ports: 
       - 27017:27017
-  web_front:
-    image: 'web_front:dev'
-    container_name: 'web_front'
-    environment: 
-      - CI=true
-      - HOST=web_front
-    build:
-      context: ./appraisal-web-front
-      dockerfile: Dockerfile.dev
+    entrypoint: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
+  mongodb2:
+    image: 'mongo'
+    hostname: "mongodb2"
+    container_name: "mongodb2"
+    volumes: 
+      - mongodata:/data/db2
     ports: 
-      - 3000:3000
+      - 27016:27017
+    entrypoint: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
+  mongodb3:
+    image: 'mongo'
+    hostname: "mongodb3"
+    container_name: "mongodb3"
     volumes: 
-      - ./appraisal-web-front:/app
-  web_back:
-    image: 'web_back:dev'
-    container_name: 'web_back'
-    build:
-      context: ./appraisal-web-back
-      dockerfile: Dockerfile.dev
-    volumes: 
-      - ./appraisal-web-back:/urs/src/appraisal-back
-    ports:
-      - 3001:3001
-  nginx_dev:
-    image: 'nignx_dev'
-    container_name: 'nginx_dev'
-    build: 
-      context: ./appraisal-web-front
-      dockerfile: Dockerfile-nginx.dev
-    ports:
-    - 3002:3002
+      - mongodata:/data/db3
+    ports: 
+      - 27015:27017
+    entrypoint: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
+  # web_front:
+  #   image: 'web_front:dev'
+  #   container_name: 'web_front'
+  #   environment: 
+  #     - CI=true
+  #     - HOST=web_front
+  #   build:
+  #     context: ./appraisal-web-front
+  #     dockerfile: Dockerfile.dev
+  #   ports: 
+  #     - 3000:3000
+  #   volumes: 
+  #     - ./appraisal-web-front:/app
+  # web_back:
+  #   image: 'web_back:dev'
+  #   container_name: 'web_back'
+  #   build:
+  #     context: ./appraisal-web-back
+  #     dockerfile: Dockerfile.dev
+  #   volumes: 
+  #     - ./appraisal-web-back:/urs/src/appraisal-back
+  #   ports:
+  #     - 3001:3001
+  # nginx_dev:
+  #   image: 'nignx_dev'
+  #   container_name: 'nginx_dev'
+  #   build: 
+  #     context: ./appraisal-web-front
+  #     dockerfile: Dockerfile-nginx.dev
+  #   ports:
+  #   - 3002:3002
 
 volumes: 
   mongodata:
