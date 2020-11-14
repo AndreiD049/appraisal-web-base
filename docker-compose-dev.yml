@@ -9,8 +9,9 @@ services:
       - mongodata:/data/db
     ports: 
       - 27017:27017
+    env_file: .env 
     extra_hosts: 
-      - "mongodb:192.168.0.11"
+      - "mongodb:${MONGODB}"
     entrypoint: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
   mongodb2:
     image: 'mongo'
@@ -20,8 +21,9 @@ services:
       - mongodata:/data/db2
     ports: 
       - 27016:27017
+    env_file: .env 
     extra_hosts: 
-      - "mongodb:192.168.0.11"
+      - "mongodb:${MONGODB}"
     entrypoint: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
   mongodb3:
     image: 'mongo'
@@ -31,8 +33,9 @@ services:
       - mongodata:/data/db3
     ports: 
       - 27015:27017
+    env_file: .env 
     extra_hosts: 
-      - "mongodb:192.168.0.11"
+      - "mongodb:${MONGODB}"
     entrypoint: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
   web_front:
     image: 'web_front:dev'
@@ -55,6 +58,9 @@ services:
       dockerfile: Dockerfile.dev
     volumes: 
       - ./appraisal-web-back:/urs/src/appraisal-back
+    env_file: .env 
+    extra_hosts: 
+      - "mongodb:${MONGODB}"
     ports:
       - 3001:3001
   nginx_dev:
