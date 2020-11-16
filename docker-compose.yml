@@ -10,15 +10,26 @@ services:
     ports: 
       - 27017:27017
     entrypoint: ["mongod", "--bind_ip_all", "--auth", "--keyFile", "/keyfile/mongodb.keyfile", "--replSet", "rs0"]
+  nginx:
+    image: 'nginx'
+    container_name: 'nginx'
+    build: './nginx'
+    volumes: 
+      - webroot:/var/www/html
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+    ports: 
+      - 80:80
+      - 443:443
+    depends_on: 
+      - web_front
   web_front:
     image: 'web_front'
     container_name: 'web_front'
     build: ./appraisal-web-front
     volumes: 
       - webroot:/var/www/html
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - dhparam:/etc/ssl/certs
     ports: 
       - 80:80
       - 443:443
@@ -36,8 +47,8 @@ services:
       - certbot-var:/var/lib/letsencrypt
       - webroot:/var/www/html
     depends_on: 
-      - web_front
-    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d admintools.online -d www.admintools.online
+      - nginx
+    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d test.admintools.online -d admintools.online -d www.admintools.online -d www.test.admintools.online
 
 volumes: 
   mongodata:
