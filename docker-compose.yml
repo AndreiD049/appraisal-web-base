@@ -6,9 +6,10 @@ services:
     container_name: "mongodb"
     volumes: 
       - mongodata:/data/db
+      - keyfile:/keyfile
     ports: 
       - 27017:27017
-    entrypoint: ["mongod", "--bind_ip_all", "--auth", "--replSet", "rs0"]
+    entrypoint: ["mongod", "--bind_ip_all", "--auth", "--keyFile", "/keyfile/mongodb.keyfile", "--replSet", "rs0"]
   web_front:
     image: 'web_front'
     container_name: 'web_front'
@@ -54,4 +55,9 @@ volumes:
       type: none
       device: /appraisal-web-base/dhparam/
       o: bind
-  
+  keyfile:
+    driver: local
+    driver_opts:
+      type: none
+      device: /appraisal-web-base/keyfile/
+      o: bind
