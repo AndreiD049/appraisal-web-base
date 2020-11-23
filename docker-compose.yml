@@ -13,7 +13,15 @@ services:
   web_front:
     image: 'web_front'
     container_name: 'web_front'
-    build: ./appraisal-web-front
+    build:
+      context: ./appraisal-web-front
+      dockerfile: ../configs/production/Dockerfile.web_front
+  nginx:
+    image: 'nginx'
+    container_name: 'nginx'
+    build:
+      context: ./configs
+      dockerfile: ./production/Dockerfile.nginx
     volumes: 
       - webroot:/var/www/html
       - certbot-etc:/etc/letsencrypt
@@ -22,10 +30,14 @@ services:
     ports: 
       - 80:80
       - 443:443
+    depends_on:
+      - web_front
   web_back:
     image: 'web_back'
     container_name: 'web_back'
-    build: ./appraisal-web-back
+    build:
+      context: ./appraisal-web-back
+      dockerfile: ../configs/production/Dockerfile.web_back
     ports:
       - 3001:3001
   certbot:
@@ -53,11 +65,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /appraisal-web-base/dhparam/
+      device: ./dhparam/
       o: bind
   keyfile:
     driver: local
     driver_opts:
       type: none
-      device: /appraisal-web-base/keyfile/
+      device: ./keyfile/
       o: bind

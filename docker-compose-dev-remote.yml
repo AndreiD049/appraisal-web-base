@@ -8,7 +8,7 @@ services:
       - HOST=web_front
     build:
       context: ./appraisal-web-front
-      dockerfile: ./Dockerfile.dev
+      dockerfile: ../configs/remote/Dockerfile.dev_front
     ports: 
       - 3000:3000
     volumes: 
@@ -18,7 +18,7 @@ services:
     container_name: 'web_back'
     build:
       context: ./appraisal-web-back
-      dockerfile: Dockerfile.dev
+      dockerfile: ../configs/remote/Dockerfile.dev_back
     volumes: 
       - ./appraisal-web-back:/urs/src/appraisal-back
     ports:
@@ -27,8 +27,8 @@ services:
     image: 'nignx_dev'
     container_name: 'nginx_dev'
     build: 
-      context: ./remote
-      dockerfile: Dockerfile.nginx
+      context: ./configs
+      dockerfile: ./remote/Dockerfile.nginx
     ports:
     - 80:80
     - 443:443
