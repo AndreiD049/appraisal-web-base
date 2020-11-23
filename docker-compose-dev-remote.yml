@@ -1,0 +1,65 @@
+version: "3.8"
+services: 
+  web_front:
+    image: 'web_front:dev'
+    container_name: 'web_front'
+    environment: 
+      - CI=true
+      - HOST=web_front
+    build:
+      context: ./appraisal-web-front
+      dockerfile: ../configs/remote/Dockerfile.dev_front
+    ports: 
+      - 3000:3000
+    volumes: 
+      - ./appraisal-web-front:/app
+  web_back:
+    image: 'web_back:dev'
+    container_name: 'web_back'
+    build:
+      context: ./appraisal-web-back
+      dockerfile: ../configs/remote/Dockerfile.dev_back
+    volumes: 
+      - ./appraisal-web-back:/urs/src/appraisal-back
+    ports:
+      - 3001:3001
+  nginx_dev:
+    image: 'nignx_dev'
+    container_name: 'nginx_dev'
+    build: 
+      context: ./configs
+      dockerfile: ./remote/Dockerfile.nginx
+    ports:
+    - 80:80
+    - 443:443
+    volumes:
+      - webroot:/var/www/html
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - webroot:/var/www/html
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    depends_on:
+      - nginx_dev
+    command: certonly --webroot -w=/var/www/html --email adimitrascu94@gmail.com --agree-tos --no-eff-email -d admin-tc.xyz,www.admin-tc.xyz,develop.admin-tc.xyz,www.develop.admin-tc.xyz
+volumes: 
+  mongodata:
+  certbot-etc:
+  certbot-var:
+  webroot:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/data/views
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./dhparam
+      o: bind

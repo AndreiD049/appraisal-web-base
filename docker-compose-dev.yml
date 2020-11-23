@@ -21,7 +21,7 @@ services:
       - HOST=web_front
     build:
       context: ./appraisal-web-front
-      dockerfile: Dockerfile.dev
+      dockerfile: ../configs/local/Dockerfile.dev_front
     ports: 
       - 3000:3000
     volumes: 
@@ -31,7 +31,7 @@ services:
     container_name: 'web_back'
     build:
       context: ./appraisal-web-back
-      dockerfile: Dockerfile.dev
+      dockerfile: ../configs/local/Dockerfile.dev_back
     volumes: 
       - ./appraisal-web-back:/urs/src/appraisal-back
     env_file: .env 
@@ -43,8 +43,8 @@ services:
     image: 'nignx_dev'
     container_name: 'nginx_dev'
     build: 
-      context: ./appraisal-web-front
-      dockerfile: Dockerfile-nginx.dev
+      context: ./configs
+      dockerfile: ./local/Dockerfile-nginx.dev
     ports:
     - 3002:3002
 volumes: 
