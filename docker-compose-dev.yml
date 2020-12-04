@@ -12,7 +12,7 @@ services:
     env_file: .env 
     extra_hosts: 
       - "mongodb:${MONGODB}"
-    entrypoint: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
+    entrypoint: ["mongod", "--bind_ip_all", "--noscripting", "--replSet", "rs0"]
   web_front:
     image: 'web_front:dev'
     container_name: 'web_front'
