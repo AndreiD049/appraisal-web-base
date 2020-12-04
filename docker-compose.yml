@@ -65,11 +65,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./dhparam/
+      device: /appraisal-web-base/dhparam/
       o: bind
   keyfile:
     driver: local
     driver_opts:
       type: none
-      device: ./keyfile/
+      device: /appraisal-web-base/keyfile/
       o: bind
