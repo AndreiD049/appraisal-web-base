@@ -9,7 +9,7 @@ services:
       - keyfile:/keyfile
     ports: 
       - 27017:27017
-    entrypoint: ["mongod", "--bind_ip_all", "--auth", "--keyFile", "/keyfile/mongodb.keyfile", "--replSet", "rs0"]
+    entrypoint: ["mongod", "--bind_ip_all", "--noscripting", "--auth", "--keyFile", "/keyfile/mongodb.keyfile", "--replSet", "rs0"]
   web_front:
     image: 'web_front'
     container_name: 'web_front'
