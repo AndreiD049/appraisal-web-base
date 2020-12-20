@@ -20,12 +20,12 @@ services:
       - CI=true
       - HOST=web_front
     build:
-      context: ./appraisal-web-front
+      context: ./admintools-front
       dockerfile: ../configs/local/Dockerfile.dev_front
     ports: 
       - 3000:3000
     volumes: 
-      - ./appraisal-web-front:/app
+      - ./admintools-front:/app
   web_back:
     image: 'web_back:dev'
     container_name: 'web_back'
