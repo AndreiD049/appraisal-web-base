@@ -1,0 +1,27 @@
+#+TITLE: Trainings functionality rework
+[2020-11-26 Thu]
+
+#+BEGIN_LOGIC
+People need to be able to register planned trainings that will then be marked as achieved
+#+END_LOGIC
+
+* Plan
+** DONE Create migration for Mongo
+  All Training_Suggested and Training_Items will become Training_Planned
+** DONE Backend
+*** DONE Adjust models to accept new item types
+*** DONE Adjust services that used Training_Suggested or Training logic
+  - updateItem
+  - insertItem
+  - deleteItem
+** TODO Frontend
+*** DONE Change frontend types of items retrieved from Training and Training_Suggested to Training_Planned and Training_Achieved
+*** DONE Remove all the logic related to Training_Suggested
+*** DONE Change logic of the button Move to Planned/Achieved to also include Trainings
+*** DONE Adjust logic of finishing an item, it should duplicate Training_planned too
+** After
+*** DONE Adjust backend models to not include Training and Training Suggested
+*** DONE Include headers for 'Objectived' and 'Trainings'
+*** DONE Test everything
+*** Run migration on production
+*** Remove unique index from production database
