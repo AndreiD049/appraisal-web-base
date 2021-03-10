@@ -1,0 +1,7 @@
+FROM node:alpine
+WORKDIR /usr/src/connect
+COPY package.json .
+RUN npm install
+EXPOSE 3004
+CMD ["node", "index.mjs"]
+COPY . .
