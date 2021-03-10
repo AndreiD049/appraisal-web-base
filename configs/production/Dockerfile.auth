@@ -1,0 +1,7 @@
+FROM node:alpine
+WORKDIR /usr/src/auth
+COPY package.json .
+RUN npm install
+EXPOSE 3003
+CMD ["node", "index.mjs"]
+COPY . .
