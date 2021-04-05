@@ -1,5 +1,44 @@
 version: "3.8"
 services: 
+  mongodb1:
+    image: 'mongo'
+    hostname: "mongodb1"
+    container_name: "mongodb1"
+    volumes: 
+      - mongodata:/data/db
+    ports: 
+      - 27017:27017
+    env_file: .env 
+    extra_hosts: 
+      - "mongodb:${MONGODB}"
+    entrypoint: ["mongod", "--bind_ip_all", "--noscripting", "--replSet", "rs0"]
+  redis:
+    image: redis:alpine
+    container_name: redis
+    env_file: .env
+    command: "redis-server --requirepass ${REDIS_PASSWORD}"
+    ports:
+      - 6379:6379
+  connect:
+    image: 'connect:dev'
+    container_name: 'connect'
+    build:
+      context: './admintools-connect'
+      dockerfile: '../configs/remote/Dockerfile.connect.dev'
+    ports:
+      - 3004:3004
+    volumes: 
+      - ./admintools-connect:/usr/src/connect
+  auth:
+    image: 'auth:dev'
+    container_name: 'auth'
+    build:
+      context: ./admintools-auth
+      dockerfile: ../configs/remote/Dockerfile.auth
+    ports: 
+      - 3003:3003
+    volumes: 
+      - ./admintools-auth:/usr/src/auth
   web_front:
     image: 'web_front:dev'
     container_name: 'web_front'
@@ -7,12 +46,12 @@ services:
       - CI=true
       - HOST=web_front
     build:
-      context: ./appraisal-web-front
-      dockerfile: ../configs/remote/Dockerfile.dev_front
+      context: ./admintools-front
+      dockerfile: ../configs/local/Dockerfile.dev_front
     ports: 
       - 3000:3000
     volumes: 
-      - ./appraisal-web-front:/app
+      - ./admintools-front:/app
   web_back:
     image: 'web_back:dev'
     container_name: 'web_back'
@@ -20,7 +59,10 @@ services:
       context: ./appraisal-web-back
       dockerfile: ../configs/remote/Dockerfile.dev_back
     volumes: 
-      - ./appraisal-web-back:/urs/src/appraisal-back
+      - ./appraisal-web-back:/usr/src/appraisal-back
+    env_file: .env 
+    extra_hosts: 
+      - "mongodb:${MONGODB}"
     ports:
       - 3001:3001
   nginx_dev:
@@ -46,7 +88,7 @@ services:
       - certbot-var:/var/lib/letsencrypt
     depends_on:
       - nginx_dev
-    command: certonly --webroot -w=/var/www/html --email adimitrascu94@gmail.com --agree-tos --no-eff-email -d admin-tc.xyz,www.admin-tc.xyz,develop.admin-tc.xyz,www.develop.admin-tc.xyz
+    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d test.admintools.online,www.test.admintools.online
 volumes: 
   mongodata:
   certbot-etc:

@@ -14,14 +14,14 @@ services:
     image: 'web_front'
     container_name: 'web_front'
     build:
-      context: ./appraisal-web-front
-      dockerfile: ../configs/production/Dockerfile.web_front
+      context: ./admintools-front
+      dockerfile: ../configs/test/Dockerfile.web_front
   connect:
     image: 'connect'
     container_name: 'connect'
     build:
       context: './admintools-connect'
-      dockerfile: '../configs/production/Dockerfile.connect'
+      dockerfile: '../configs/test/Dockerfile.connect'
     ports:
       - 3004:3004
   auth:
@@ -29,7 +29,7 @@ services:
     container_name: 'auth'
     build:
       context: ./admintools-auth
-      dockerfile: ../configs/production/Dockerfile.auth
+      dockerfile: ../configs/test/Dockerfile.auth
     ports: 
       - 3003:3003
   redis:
@@ -44,7 +44,7 @@ services:
     container_name: 'nginx'
     build:
       context: ./configs
-      dockerfile: ./production/Dockerfile.nginx
+      dockerfile: ./test/Dockerfile.nginx
     volumes: 
       - webroot:/var/www/html
       - certbot-etc:/etc/letsencrypt
@@ -58,9 +58,10 @@ services:
   web_back:
     image: 'web_back'
     container_name: 'web_back'
+    restart: always
     build:
       context: ./appraisal-web-back
-      dockerfile: ../configs/production/Dockerfile.web_back
+      dockerfile: ../configs/test/Dockerfile.web_back
     ports:
       - 3001:3001
   certbot:
@@ -72,7 +73,7 @@ services:
       - webroot:/var/www/html
     depends_on: 
       - web_front
-    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d admintools.online,www.admintools.online
+    command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d test.admintools.online,www.test.admintools.online
 
 volumes: 
   mongodata:
@@ -88,11 +89,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /appraisal-web-base/dhparam/
+      device: ~/appraisal-web-base/dhparam/
       o: bind
   keyfile:
     driver: local
     driver_opts:
       type: none
-      device: /appraisal-web-base/keyfile/
+      device: ~/appraisal-web-base/keyfile/
       o: bind

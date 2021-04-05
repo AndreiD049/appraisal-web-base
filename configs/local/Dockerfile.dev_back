@@ -1,8 +1,8 @@
 FROM node:alpine
 RUN apk add --update git
-WORKDIR /urs/src/appraisal-back
+WORKDIR /usr/src/appraisal-back
 ADD package.json .
 ADD package-lock.json .
 RUN npm install
 EXPOSE 3001
-CMD ["npx",  "nodemon", "index.js"]
+CMD ["npx", "nodemon", "index.js"]
