@@ -2,8 +2,6 @@
 *.keyfile
 
 appraisal-web-back
-appraisal-web-front
-admintools-front
 admintools-auth
 admintools-connect
 dhparam/*.pem

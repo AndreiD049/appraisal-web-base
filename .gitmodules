@@ -1,0 +1,3 @@
+[submodule "admintools-front"]
+	path = admintools-front
+	url = git@github.com:AndreiD049/admintools-front.git
