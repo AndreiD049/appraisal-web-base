@@ -1,0 +1,7 @@
+FROM node:alpine
+WORKDIR /usr/src/connect
+ADD package.json .
+ADD package-lock.json .
+RUN npm install
+EXPOSE 3001
+CMD ["npm", "run", "dev"]
