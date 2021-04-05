@@ -1,9 +1,6 @@
 # mongodb keyfile
 *.keyfile
 
-appraisal-web-back
-admintools-auth
-admintools-connect
 dhparam/*.pem
 # Logs
 logs

@@ -1,3 +1,12 @@
 [submodule "admintools-front"]
 	path = admintools-front
 	url = git@github.com:AndreiD049/admintools-front.git
+[submodule "appraisal-web-back"]
+	path = appraisal-web-back
+	url = git@github.com:AndreiD049/appraisal-web-back.git
+[submodule "admintools-auth"]
+	path = admintools-auth
+	url = git@github.com:AndreiD049/admintools-auth.git
+[submodule "admintools-connect"]
+	path = admintools-connect
+	url = git@github.com:AndreiD049/admintools-connect.git
