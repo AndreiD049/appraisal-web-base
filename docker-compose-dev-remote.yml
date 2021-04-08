@@ -1,15 +1,15 @@
 version: "3.8"
-services: 
+services:
   mongodb1:
-    image: 'mongo'
+    image: "mongo"
     hostname: "mongodb1"
     container_name: "mongodb1"
-    volumes: 
+    volumes:
       - mongodata:/data/db
-    ports: 
+    ports:
       - 27017:27017
-    env_file: .env 
-    extra_hosts: 
+    env_file: .env
+    extra_hosts:
       - "mongodb:${MONGODB}"
     entrypoint: ["mongod", "--bind_ip_all", "--noscripting", "--replSet", "rs0"]
   redis:
@@ -20,60 +20,60 @@ services:
     ports:
       - 6379:6379
   connect:
-    image: 'connect:dev'
-    container_name: 'connect'
+    image: "connect:dev"
+    container_name: "connect"
     build:
-      context: './admintools-connect'
-      dockerfile: '../configs/remote/Dockerfile.connect.dev'
+      context: "./admintools-connect"
+      dockerfile: "../configs/remote/Dockerfile.connect.dev"
     ports:
       - 3004:3004
-    volumes: 
+    volumes:
       - ./admintools-connect:/usr/src/connect
   auth:
-    image: 'auth:dev'
-    container_name: 'auth'
+    image: "auth:dev"
+    container_name: "auth"
     build:
       context: ./admintools-auth
       dockerfile: ../configs/remote/Dockerfile.auth
-    ports: 
+    ports:
       - 3003:3003
-    volumes: 
+    volumes:
       - ./admintools-auth:/usr/src/auth
   web_front:
-    image: 'web_front:dev'
-    container_name: 'web_front'
-    environment: 
+    image: "web_front:dev"
+    container_name: "web_front"
+    environment:
       - CI=true
       - HOST=web_front
     build:
       context: ./admintools-front
       dockerfile: ../configs/local/Dockerfile.dev_front
-    ports: 
+    ports:
       - 3000:3000
-    volumes: 
+    volumes:
       - ./admintools-front:/app
   web_back:
-    image: 'web_back:dev'
-    container_name: 'web_back'
+    image: "web_back:dev"
+    container_name: "web_back"
     build:
       context: ./appraisal-web-back
       dockerfile: ../configs/remote/Dockerfile.dev_back
-    volumes: 
+    volumes:
       - ./appraisal-web-back:/usr/src/appraisal-back
-    env_file: .env 
-    extra_hosts: 
+    env_file: .env
+    extra_hosts:
       - "mongodb:${MONGODB}"
     ports:
       - 3001:3001
   nginx_dev:
-    image: 'nignx_dev'
-    container_name: 'nginx_dev'
-    build: 
+    image: "nignx_dev"
+    container_name: "nginx_dev"
+    build:
       context: ./configs
       dockerfile: ./remote/Dockerfile.nginx
     ports:
-    - 80:80
-    - 443:443
+      - 80:80
+      - 443:443
     volumes:
       - webroot:/var/www/html
       - certbot-etc:/etc/letsencrypt
@@ -89,7 +89,7 @@ services:
     depends_on:
       - nginx_dev
     command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d test.admintools.online,www.test.admintools.online
-volumes: 
+volumes:
   mongodata:
   certbot-etc:
   certbot-var:

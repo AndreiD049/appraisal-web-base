@@ -1,36 +1,46 @@
 version: "3.8"
-services: 
+services:
   mongodb:
-    image: 'mongo'
+    image: "mongo"
     hostname: "admintools.online"
     container_name: "mongodb"
-    volumes: 
+    volumes:
       - mongodata:/data/db
       - keyfile:/keyfile
-    ports: 
+    ports:
       - 27017:27017
-    entrypoint: ["mongod", "--bind_ip_all", "--noscripting", "--auth", "--keyFile", "/keyfile/mongodb.keyfile", "--replSet", "rs0"]
+    entrypoint:
+      [
+        "mongod",
+        "--bind_ip_all",
+        "--noscripting",
+        "--auth",
+        "--keyFile",
+        "/keyfile/mongodb.keyfile",
+        "--replSet",
+        "rs0",
+      ]
   web_front:
-    image: 'web_front'
-    container_name: 'web_front'
+    image: "web_front"
+    container_name: "web_front"
     build:
       context: ./admintools-front
       dockerfile: ../configs/test/Dockerfile.web_front
   connect:
-    image: 'connect'
-    container_name: 'connect'
+    image: "connect"
+    container_name: "connect"
     build:
-      context: './admintools-connect'
-      dockerfile: '../configs/test/Dockerfile.connect'
+      context: "./admintools-connect"
+      dockerfile: "../configs/test/Dockerfile.connect"
     ports:
       - 3004:3004
   auth:
-    image: 'auth'
-    container_name: 'auth'
+    image: "auth"
+    container_name: "auth"
     build:
       context: ./admintools-auth
       dockerfile: ../configs/test/Dockerfile.auth
-    ports: 
+    ports:
       - 3003:3003
   redis:
     image: redis:alpine
@@ -40,24 +50,24 @@ services:
     ports:
       - 6379:6379
   nginx:
-    image: 'nginx'
-    container_name: 'nginx'
+    image: "nginx"
+    container_name: "nginx"
     build:
       context: ./configs
       dockerfile: ./test/Dockerfile.nginx
-    volumes: 
+    volumes:
       - webroot:/var/www/html
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - dhparam:/etc/ssl/certs
-    ports: 
+    ports:
       - 80:80
       - 443:443
     depends_on:
       - web_front
   web_back:
-    image: 'web_back'
-    container_name: 'web_back'
+    image: "web_back"
+    container_name: "web_back"
     restart: always
     build:
       context: ./appraisal-web-back
@@ -71,11 +81,11 @@ services:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - webroot:/var/www/html
-    depends_on: 
+    depends_on:
       - web_front
     command: certonly --webroot --webroot-path=/var/www/html --email andrei.dimitrascu.94@gmail.com --agree-tos --no-eff-email -d test.admintools.online,www.test.admintools.online
 
-volumes: 
+volumes:
   mongodata:
   certbot-etc:
   certbot-var:
